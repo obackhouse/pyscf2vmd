@@ -59,6 +59,7 @@ class Options:
 
     # File settings
     input_file: str = "input.cube"
+    output_name: str = "output"
     keep_vmd_input: bool = False
     quit_vmd: bool = True
     tachyon_path: str = TACHYON_PATH
@@ -97,11 +98,11 @@ class Plotter:
             os.system("rm -f input.vmd")
 
         os.system("rm -f vmdscene.dat")
-        os.system("mv vmdscene.dat.tga %s.tga" % self.options.input_file.split(".")[0])
+        os.system("mv vmdscene.dat.tga %s.tga" % self.options.output_name)
 
         if self.options.convert_to_png:
-            os.system("convert %s.tga %s.png" % (self.options.input_file.split(".")[0], self.options.input_file.split(".")[0]))
-            os.system("rm -f %s.tga" % self.options.input_file.split(".")[0])
+            os.system("convert %s.tga %s.png" % (self.options.output_name, self.options.output_name))
+            os.system("rm -f %s.tga" % self.options.output_name)
 
     def add_command(self, cmd):
         """Add command to the input file.
