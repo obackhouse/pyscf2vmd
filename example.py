@@ -2,7 +2,7 @@
 """
 
 import numpy as np
-from pyscf import gto, scf
+from pyscf import gto, scf, lo
 from pyscf2vmd import set_paths, Plotter, CubeFile
 
 # Set paths for VMD and tachyon
@@ -13,7 +13,7 @@ set_paths(
 
 # Get some system and an orbital
 mol = gto.Mole(
-    atom="H 0 0 0; Li 0 0 1.64",
+    atom="C 0 0 0.667; C 0 0 -0.667; H 0 0.923 -1.232; H 0 -0.923 -1.232; H 0 0.923 1.232; H 0 -0.923 1.232",
     basis="cc-pvdz",
     verbose=0,
 )
@@ -22,16 +22,12 @@ mf = scf.RHF(mol)
 mf.kernel()
 orbital = mf.mo_coeff[:, mol.nelectron//2-1]
 
-# Orthogonalise the orbital
-s = mol.intor("int1e_ovlp")
-w, v = np.linalg.eigh(s)
-orth = np.dot(v * w[None]**0.5, v.T.conj())
-orbital = np.dot(orth, orbital)
-
 # Set options
 options = dict(
-    render_res = (1920, 1080),
-    convert_to_png = True,
+    render_res=(1920, 1080),
+    convert_to_png=True,
+    isovalue=0.1,
+    rotate=[90.0, -10.0, 90.0],
 )
 
 # Plot the orbital
